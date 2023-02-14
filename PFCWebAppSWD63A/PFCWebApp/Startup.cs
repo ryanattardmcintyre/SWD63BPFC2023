@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using PFCWebApp.DataAccess;
 
 namespace PFCWebApp
 {
@@ -19,6 +20,10 @@ namespace PFCWebApp
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            string credential_path = @"C:\Users\attar\Source\Repos\SWD63BPFC2023\PFCWebAppSWD63A\PFCWebApp\swd63b2023-08d5b155ddab.json";
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
+
         }
 
         public IConfiguration Configuration { get; }
@@ -41,7 +46,8 @@ namespace PFCWebApp
                         options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
                     });
 
-
+            string projectId = Configuration["projectid"].ToString();
+            services.AddScoped<FirestoreBooksRepository>(provider => new FirestoreBooksRepository(projectId));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
