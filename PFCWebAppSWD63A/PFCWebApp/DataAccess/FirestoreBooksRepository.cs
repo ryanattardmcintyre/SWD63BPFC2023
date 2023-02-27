@@ -33,5 +33,61 @@ namespace PFCWebApp.DataAccess
 
             return books;
         }
+
+        public async Task<string> GetBookId (string isbn)
+        {
+            Query booksQuery = db.Collection("books").WhereEqualTo("Isbn", isbn);
+            QuerySnapshot booksQuerySnapshot = await booksQuery.GetSnapshotAsync();
+
+            DocumentSnapshot documentSnapshot = booksQuerySnapshot.Documents.FirstOrDefault();
+            if (documentSnapshot.Exists == false) throw new Exception("Book does not exist");
+            else
+            {
+                var id = documentSnapshot.Id;
+                return id;
+            }
+        }
+
+        public async void Update(Book b)
+        {
+            Query booksQuery = db.Collection("books").WhereEqualTo("Isbn", b.Isbn);
+            QuerySnapshot booksQuerySnapshot = await booksQuery.GetSnapshotAsync();
+
+            DocumentSnapshot documentSnapshot = booksQuerySnapshot.Documents.FirstOrDefault();
+            if (documentSnapshot.Exists == false) throw new Exception("Book does not exist");
+            else
+            {
+                DocumentReference booksRef = db.Collection("books").Document(documentSnapshot.Id);
+                await booksRef.SetAsync(b);
+            }
+        }
+
+        public async Task<Book> GetBook(string isbn)
+        {
+            Query booksQuery = db.Collection("books").WhereEqualTo("Isbn", isbn);
+            QuerySnapshot booksQuerySnapshot = await booksQuery.GetSnapshotAsync();
+           
+            DocumentSnapshot documentSnapshot = booksQuerySnapshot.Documents.FirstOrDefault();
+            if (documentSnapshot.Exists == false) return null;
+            else
+            {
+                Book result = documentSnapshot.ConvertTo<Book>();
+                return result;
+            }
+        }
+
+        public async Task Delete(string isbn) {
+
+            Query booksQuery = db.Collection("books").WhereEqualTo("Isbn", isbn);
+            QuerySnapshot booksQuerySnapshot = await booksQuery.GetSnapshotAsync();
+
+            DocumentSnapshot documentSnapshot = booksQuerySnapshot.Documents.FirstOrDefault();
+            if (documentSnapshot.Exists == false) throw new Exception("Book does not exist");
+            else
+            {
+                 DocumentReference booksRef = db.Collection("books").Document(documentSnapshot.Id);
+                 await booksRef.DeleteAsync();
+            }
+        }
     }
 }

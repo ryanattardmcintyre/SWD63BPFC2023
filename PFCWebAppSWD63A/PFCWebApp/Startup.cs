@@ -47,7 +47,10 @@ namespace PFCWebApp
                     });
 
             string projectId = Configuration["projectid"].ToString();
+
             services.AddScoped<FirestoreBooksRepository>(provider => new FirestoreBooksRepository(projectId));
+            services.AddScoped<FirestoreReservationsRepository>(provider => 
+            new FirestoreReservationsRepository(projectId, new FirestoreBooksRepository(projectId)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
