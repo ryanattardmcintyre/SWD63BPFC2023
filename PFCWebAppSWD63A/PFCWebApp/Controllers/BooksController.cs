@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using PFCWebApp.DataAccess;
 using PFCWebApp.Models;
 using System;
@@ -27,12 +30,28 @@ namespace PFCWebApp.Controllers
         { return View(); }
 
         [HttpPost]
-        public IActionResult Create(Book b )
+        public IActionResult Create(Book b, IFormFile file, [FromServices] IConfiguration config ) //an example of Method Injection
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    string bucketName = config["bucket"].ToString();
+                    if (file != null)
+                    {
+                        //1. Upload the e-book (file) in the cloud bucket
+                        var storage = StorageClient.Create();
+                        using var fileStream = file.OpenReadStream();
+
+                        string newFilename = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(file.FileName);
+
+                        storage.UploadObject(bucketName, newFilename, null, fileStream);
+
+                        b.Link = $"https://storage.googleapis.com/{bucketName}/{newFilename}";
+                    }
+
+                    //2. save the link together with the rest of the textual data into the NoSql db
+
                     _booksRepo.AddBook(b);
                     TempData["success"] = "Book was added successfully in database";
                 }

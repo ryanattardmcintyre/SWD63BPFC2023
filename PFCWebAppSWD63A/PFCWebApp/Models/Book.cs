@@ -19,5 +19,8 @@ namespace PFCWebApp.Models
         public int Year { get; set; }
         [FirestoreProperty]
         public string Category { get; set; }
+
+        [FirestoreProperty]
+        public string Link { get; set; }
     }
 }

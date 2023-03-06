@@ -47,6 +47,8 @@
                 @Html.ActionLink("Get History", "History", "Reservations", new { isbn = item.Isbn }) |
                 @Html.ActionLink("Delete", "Delete", new { isbn = item.Isbn }) |
                 @Html.ActionLink("Reserve", "Create", "Reservations", new { isbn = item.Isbn })
+
+                | <a href="@item.Link">Download</a>
             </td>
         </tr>
 }
