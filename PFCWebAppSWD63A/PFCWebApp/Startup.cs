@@ -51,6 +51,11 @@ namespace PFCWebApp
             services.AddScoped<FirestoreBooksRepository>(provider => new FirestoreBooksRepository(projectId));
             services.AddScoped<FirestoreReservationsRepository>(provider => 
             new FirestoreReservationsRepository(projectId, new FirestoreBooksRepository(projectId)));
+
+            services.AddScoped<CacheMenusRepository>(
+                provider => 
+              //  new CacheMenusRepository("redis-14410.c1.us-east1-2.gce.cloud.redislabs.com:14410,password="));
+               new CacheMenusRepository("127.0.0.1:6379"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
