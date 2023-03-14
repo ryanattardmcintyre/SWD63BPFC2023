@@ -12,10 +12,13 @@ namespace PFCWebApp.Controllers
     {
         FirestoreBooksRepository _fbr;
         FirestoreReservationsRepository _frr;
-        public ReservationsController(FirestoreBooksRepository fbr, FirestoreReservationsRepository frr)
+        PubSubEmailRepository _pser;
+        public ReservationsController(FirestoreBooksRepository fbr, FirestoreReservationsRepository frr
+            , PubSubEmailRepository pser)
         {
             _fbr = fbr;
             _frr = frr;
+            _pser = pser;
         }
 
         public async Task<IActionResult> Index()
@@ -41,7 +44,11 @@ namespace PFCWebApp.Controllers
                 r.From = Google.Cloud.Firestore.Timestamp.FromDateTime(from.ToUniversalTime());
                 r.To = Google.Cloud.Firestore.Timestamp.FromDateTime(to.ToUniversalTime());
 
+                //adds the reservation to the nosql database
                 await _frr.AddReservation(r);
+
+                //pushes the reservation onto a queue so eventually user will be notified by email as a confirmation
+                await _pser.PushMessage(r);
 
                 TempData["success"] = "Reservation added";
             }

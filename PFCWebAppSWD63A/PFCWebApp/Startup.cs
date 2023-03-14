@@ -56,6 +56,10 @@ namespace PFCWebApp
                 provider => 
               //  new CacheMenusRepository("redis-14410.c1.us-east1-2.gce.cloud.redislabs.com:14410,password="));
                new CacheMenusRepository("127.0.0.1:6379"));
+
+            services.AddScoped<PubSubEmailRepository>(provider => new PubSubEmailRepository(projectId));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
