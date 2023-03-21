@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace PFCWebApp.Models
+namespace Common.Models
 {
     [FirestoreData]
     public class Reservation
@@ -30,14 +30,14 @@ namespace PFCWebApp.Models
             }
             set
             {
-              To =  Google.Cloud.Firestore.Timestamp.FromDateTime(DtTo.ToUniversalTime());
+              To =  Google.Cloud.Firestore.Timestamp.FromDateTime(value.ToUniversalTime());
             }
         }
 
         public DateTime DtFrom
         {
             get { return From.ToDateTime(); }
-            set { From = Google.Cloud.Firestore.Timestamp.FromDateTime(DtFrom.ToUniversalTime()); }
+            set { From = Google.Cloud.Firestore.Timestamp.FromDateTime(value.ToUniversalTime()); }
         }
     }
 }
