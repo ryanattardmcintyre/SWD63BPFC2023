@@ -13,10 +13,11 @@ namespace SubscriberApp
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment host)
         {
             //this path WHEN THIS APP WILL BE HOSTED it has to be dynamically retrieved
-            string credential_path = @"C:\Users\attar\Source\Repos\SWD63BPFC2023\PFCWebAppSWD63A\SubscriberApp\swd63b2023-08d5b155ddab.json";
+            string credential_path =  host.ContentRootPath + "\\swd63b2023-08d5b155ddab.json";
+            //@"C:\Users\attar\Source\Repos\SWD63BPFC2023\PFCWebAppSWD63A\SubscriberApp\swd63b2023-08d5b155ddab.json";
             System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
 
             Configuration = configuration;

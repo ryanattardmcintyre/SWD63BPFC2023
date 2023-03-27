@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Google.Cloud.Diagnostics.AspNetCore3;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -31,8 +32,17 @@ namespace PFCWebApp.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Privacy([FromServices] IExceptionLogger exceptionLogger)
         {
+            try
+            {
+                throw new Exception("Testing the google exception logger");
+            }
+            catch (Exception ex)
+            {
+                exceptionLogger.Log(ex);
+            }
+
             return View();
         }
 

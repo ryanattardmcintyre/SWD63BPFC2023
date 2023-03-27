@@ -19,14 +19,12 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        @{
-                            var list = await cmr.GetMenus();
-                        }
+                  
 
-                        @foreach (Menu m in list.OrderBy(x=>x.Order))
+                        @foreach (Menu m in (await cmr.GetMenus()).OrderBy(x=>x.Order))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="@m.Link">@m.Text</a>
+                                <a class="nav-link text-dark" href="@m.Link">@m.Title</a>
                             </li>
                         }
 
