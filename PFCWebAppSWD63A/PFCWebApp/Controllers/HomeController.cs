@@ -29,6 +29,7 @@ namespace PFCWebApp.Controllers
         [Authorize]
         public IActionResult MembersHome()
         {
+            bool stop = true;
             return View();
         }
 
