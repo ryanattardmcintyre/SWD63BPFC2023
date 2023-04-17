@@ -51,6 +51,11 @@ namespace PFCWebApp.Controllers
                 //pushes the reservation onto a queue so eventually user will be notified by email as a confirmation
                 await _pser.PushMessage(r);
 
+                var docId = _fbr.GetBookId(r.Isbn);
+
+                //await _pser.PushMessage(docId)
+
+
                 TempData["success"] = "Reservation added";
             }
             catch (Exception ex)
